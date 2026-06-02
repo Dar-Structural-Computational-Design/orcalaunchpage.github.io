@@ -531,6 +531,85 @@
       height: 440px
     }
 
+    /* intro video */
+    .videohold {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #01040a
+    }
+
+    .videohold video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #01040a;
+      display: block
+    }
+
+    .playpad {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      cursor: pointer;
+      border: 0;
+      width: 100%;
+      background: radial-gradient(60% 60% at 50% 45%, rgba(2, 6, 15, .25), rgba(2, 6, 15, .74));
+      transition: opacity .35s ease;
+      z-index: 3
+    }
+
+    .playpad.hidden {
+      opacity: 0;
+      pointer-events: none
+    }
+
+    .playpad .pbtn {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(33, 230, 255, .14);
+      border: 1.5px solid var(--cyan);
+      box-shadow: 0 0 40px rgba(33, 230, 255, .35);
+      transition: transform .25s ease, background .25s ease
+    }
+
+    .playpad:hover .pbtn {
+      transform: scale(1.08);
+      background: rgba(33, 230, 255, .24)
+    }
+
+    .playpad .pbtn svg {
+      width: 34px;
+      height: 34px;
+      fill: var(--cyan);
+      margin-left: 4px
+    }
+
+    .playpad .plabel {
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: 17px;
+      letter-spacing: .02em;
+      color: #fff
+    }
+
+    .playpad .psnd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cyan-soft)
+    }
+
     /* feature cards */
     .features {
       display: grid;
@@ -1442,6 +1521,7 @@
   <header>
     <div class="brand"><span class="dot"></span>ORCA</div>
     <nav>
+      <a href="#intro">Intro</a>
       <a href="#extends">Extends</a>
       <a href="#features">Capabilities</a>
       <a href="#showcase">Design Review</a>
@@ -1471,6 +1551,54 @@
     <div class="scroll-hint">Descend<div class="line"></div>
     </div>
   </div>
+
+  <!-- ===================== INTRO VIDEO ===================== -->
+  <section id="intro">
+    <div class="sec-label">// meet orca</div>
+    <h2 class="sec-head">See it <span class="accent">in motion.</span></h2>
+    <p class="sec-sub">A quick tour of what Orca brings to ETABS. Best experienced with sound on —
+      hit play below.</p>
+
+    <div class="viewport" style="margin-top:50px">
+      <div class="bar">
+        <i class="on"></i><i></i><i></i>
+        <span>orca · intro reel</span>
+        <span class="who">⬤ sound enabled</span>
+      </div>
+      <div class="videohold">
+        <video id="introVideo" controls preload="metadata" playsinline poster="media/orca-intro-poster.jpg">
+          <source src="media/orca-intro.mp4" type="video/mp4">
+          <source src="media/orca-intro.webm" type="video/webm">
+          Your browser doesn't support embedded video — open <code>media/orca-intro.mp4</code> directly.
+        </video>
+        <button class="playpad" id="introPad" type="button" aria-label="Play the Orca intro video with sound">
+          <span class="pbtn"><svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg></span>
+          <span class="plabel">Watch the intro</span>
+          <span class="psnd">▶ click to play · sound on</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var v = document.getElementById('introVideo');
+      var pad = document.getElementById('introPad');
+      if (!v || !pad) return;
+      function start() {
+        v.muted = false;          // play WITH sound (this runs from a user click, so the browser allows it)
+        v.volume = 1;
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {/* ignore */ });
+        pad.classList.add('hidden');
+      }
+      pad.addEventListener('click', start);
+      v.addEventListener('play', function () { pad.classList.add('hidden'); });
+      v.addEventListener('ended', function () { pad.classList.remove('hidden'); }); // show the play button again to replay
+    })();
+  </script>
 
   <!-- ===================== EXTENDS ===================== -->
   <section id="extends">
